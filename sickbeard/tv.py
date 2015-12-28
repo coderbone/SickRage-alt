@@ -1218,7 +1218,7 @@ class TVShow(object):
 
         if quality not in allowed_qualities + preferred_qualities or quality is UNKNOWN:
             logger.log(u"Don't want this quality, ignoring found result for %s S%02dE%02d with quality %s" %
-                (self.name, season or 0, episode or 0, Quality.qualityStrings[quality]), logger.INFO)
+                (self.name, season or 0, episode or 0, Quality.qualityStrings[quality]), logger.DEBUG)
             return False
 
         myDB = db.DBConnection()
@@ -1227,7 +1227,7 @@ class TVShow(object):
 
         if not sqlResults or not len(sqlResults):
             logger.log(u"Unable to find a matching episode in database, ignoring found result for %s S%02dE%02d with quality %s" %
-                (self.name, season or 0, episode or 0, Quality.qualityStrings[quality]), logger.INFO)
+                (self.name, season or 0, episode or 0, Quality.qualityStrings[quality]), logger.DEBUG)
             return False
 
         epStatus = int(sqlResults[0]["status"])
@@ -1238,7 +1238,7 @@ class TVShow(object):
         # if we know we don't want it then just say no
         if epStatus in Quality.ARCHIVED + [UNAIRED, SKIPPED, IGNORED] and not manualSearch:
             logger.log(u"Existing episode status is '%s', ignoring found result for %s S%02dE%02d with quality %s" %
-                (epStatus_text, self.name, season or 0, episode or 0, Quality.qualityStrings[quality]), logger.INFO)
+                (epStatus_text, self.name, season or 0, episode or 0, Quality.qualityStrings[quality]), logger.DEBUG)
             return False
 
         curStatus, curQuality = Quality.splitCompositeStatus(epStatus)
@@ -1266,7 +1266,7 @@ class TVShow(object):
             return True
         else:
             logger.log(u"Episode already exists with quality %s and the found result has same/lower quality, ignoring found result for %s S%02dE%02d with quality %s" %
-            (Quality.qualityStrings[curQuality], self.name, season or 0, episode or 0, Quality.qualityStrings[quality]), logger.INFO)
+            (Quality.qualityStrings[curQuality], self.name, season or 0, episode or 0, Quality.qualityStrings[quality]), logger.DEBUG)
         return False
 
     def getOverview(self, epStatus):
